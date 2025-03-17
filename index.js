@@ -1,22 +1,26 @@
-const http = require('http');
+const express = require('express');
 
-const server = http.createServer((req,res)=>{
-    const url = url.req; 
-    console.log(url);
-    if(url==='/'){
-        res.end('Hello World');
-    } else if(url === '/contact'){
-        res.end('Contact Page');
-    } else if(url === '/about'){
-        res.end('About Page');
-    } else{
-        res.writeHead(404);
-        res.end('Sorry, Page Not Found.');
-    }
+const app = express();
+
+app.get('/',(req,res) =>{
+    res.send('Hello from Node.js');
 });
 
-const port = 3000;
+app.get('/contact',(req,res)=>{
+    res.send('The Contact Page');
+});
 
-server.listen(port, ()=>{
-    console.log(`Server running on Port ${port}`);
+app.get('/about',(req,res)=>{
+    res.send('The About Page');
+});
+
+// Only declare the wild card page route last
+app.get('*',(req,res)=>{
+    res.status(404).send('Page Not Found');
+});
+
+const PORT = 3000;
+
+app.listen(PORT,()=>{
+    console.log(`Server running on port ${PORT}`);
 });
