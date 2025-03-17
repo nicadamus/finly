@@ -439,3 +439,7 @@ video {
 .font-bold {
   font-weight: 700;
 }
+.text-teal-500 {
+  --tw-text-opacity: 1;
+  color: rgb(20 184 166 / var(--tw-text-opacity, 1));
+}
