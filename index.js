@@ -3,23 +3,30 @@ const morgan = require('morgan');
 
 const app = express();
 
+app.set('views','./views');
+app.set('view engine','ejs');
+
 app.use(morgan('dev'));
 
 app.get('/',(req,res) =>{
-    res.send('Hello from Node.js');
+    res.render('index',{message:'Hello from Node.js!'});
 });
 
 app.get('/contact',(req,res)=>{
-    res.send('The Contact Page');
+    // with EJS, you render not send
+    res.render('index',{message:'The Contact Page'});
+    //res.send('The Contact Page');
 });
 
 app.get('/about',(req,res)=>{
-    res.send('The About Page');
+    // with EJS, you render not send
+    res.render('index',{message:'The About Page'});
+    //res.send('The About Page');
 });
 
 // Only declare the wild card page route last
 app.get('*',(req,res)=>{
-    res.status(404).send('Page Not Found');
+    res.status(404).render('index',{message: 'Page Not Found.'});
 });
 
 const PORT = 3000;
