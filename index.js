@@ -1,9 +1,10 @@
 const http = require('http');
 
 const server = http.createServer((req,res)=>{
-    console.log(req.url);
+    const url = url.req; 
+    console.log(url);
     if(url==='/'){
-        res.end('Hello from Finly Node.js');
+        res.end('Hello World');
     } else if(url === '/contact'){
         res.end('Contact Page');
     } else if(url === '/about'){
