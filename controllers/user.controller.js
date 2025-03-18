@@ -1,28 +1,30 @@
+const bcrypt = require('bcryptjs');
+
 const User = require('../libs/models/user.model');
 
-const createUser = async (req, res) => {
-  await User.create({
-    email: 'nkayotoro@gmail.com',
-    password: 'bitchtits80',
-  });
-
-  res.render('user', { message: 'User Created', user: null });
+const signup = async(req,res)=>{
+  const { email, password } = req.body;
+  const query = { email };
 };
 
-const getUser = async (req, res) => {
-  const user = await User.findOne({ email: 'nkayotoro@gmail.com' });
-
-  res.render('user', { message: 'User Retrieved', user: user });
-};
-
-const deleteUser = async (req, res) => {
-  await User.findOneAndDelete({ email: 'nkayotoro@gmail.com' });
+const existingUser = await User.findOne(query);
+if(existingUser){
+    //Email already exists
+    res.redirect('/signup');
+}else{
+  const hashedPassword = await bcrypt.hash(password,10);
   
-  res.render('user', { message: 'User Deleted', user: null });
-};
+  const user = {
+    email,
+    password: hashedPassword,
+  };
+
+  const result = await User.create(user);
+
+  req.session.userId = result._id;
+  res.redirect('/dashboard');
+}
 
 module.exports = {
-  getUser,
-  createUser,
-  deleteUser,
+  signup,
 };

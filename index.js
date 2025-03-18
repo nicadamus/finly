@@ -5,6 +5,9 @@ require('dotenv').config();
 require('./libs/dbConnect');
 
 const userRouter = require('./routes/user.route');
+const dashboardRouter = require('./routes/dashboard.route');
+
+const session = require('express-session');
 
 const app = express();
 
@@ -13,24 +16,19 @@ app.set('view engine','ejs');
 
 app.use(morgan('dev'));
 app.use(express.static('./public'));
+// To allow Express to parse form data for POST requests
+app.use(express.urlencoded({extended: false}));
 
-app.get('/',(req,res) =>{
-    res.render('index',{message:'Hello from Node.js!'});
-});
+app.use(
+    session({
+        secret: process.env.AUTH_SECRET,
+        saveUninitialized:true,
+        resave:false,
+    })
+);
 
-app.use('/users',userRouter);
-
-app.get('/contact',(req,res)=>{
-    // with EJS, you render not send
-    res.render('index',{message:'The Contact Page'});
-    //res.send('The Contact Page');
-});
-
-app.get('/about',(req,res)=>{
-    // with EJS, you render not send
-    res.render('index',{message:'The About Page'});
-    //res.send('The About Page');
-});
+app.use('/',userRouter);
+app.use('/dashboard',dashboardRouter);
 
 // Only declare the wild card page route last
 app.get('*',(req,res)=>{
