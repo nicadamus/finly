@@ -3,7 +3,7 @@ const User = require('../libs/models/user.model');
 const createUser = async (req, res) => {
   await User.create({
     email: 'nkayotoro@gmail.com',
-    password: 'password',
+    password: 'bitchtits80',
   });
 
   res.render('user', { message: 'User Created', user: null });
