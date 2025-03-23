@@ -1,5 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
+const session = require('express-session');
+const flash = require('connect-flash');
 
 require('dotenv').config();
 require('./libs/dbConnect');
@@ -7,7 +9,7 @@ require('./libs/dbConnect');
 const userRouter = require('./routes/user.route');
 const dashboardRouter = require('./routes/dashboard.route');
 
-const session = require('express-session');
+const {verifyUser} = require('./libs/middleware'); 
 
 const app = express();
 
@@ -15,7 +17,7 @@ app.set('views','./views');
 app.set('view engine','ejs');
 
 app.use(morgan('dev'));
-app.use(express.static('./public'));
+app.use(express.static('./public/'));
 // To allow Express to parse form data for POST requests
 app.use(express.urlencoded({extended: false}));
 
@@ -27,8 +29,10 @@ app.use(
     })
 );
 
+app.use(flash());
+
 app.use('/',userRouter);
-app.use('/dashboard',dashboardRouter);
+app.use('/dashboard',verifyUser,dashboardRouter);
 
 // Only declare the wild card page route last
 app.get('*',(req,res)=>{
