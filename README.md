@@ -1,4 +1,4 @@
-#Finly
+# Finly
 
 This repository contains the code for Finly, an Invoicing Web Application.
 
