@@ -6,41 +6,41 @@ const flash = require('connect-flash');
 require('dotenv').config();
 require('./libs/dbConnect');
 
+const { verifyUser } = require('./libs/middleware');
 const userRouter = require('./routes/user.route');
 const dashboardRouter = require('./routes/dashboard.route');
 
-const {verifyUser} = require('./libs/middleware'); 
-
 const app = express();
 
-app.set('views','./views');
-app.set('view engine','ejs');
+app.set('views', './views');
+app.set('view engine', 'ejs');
 
 app.use(morgan('dev'));
-app.use(express.static('./public/'));
-// To allow Express to parse form data for POST requests
-app.use(express.urlencoded({extended: false}));
+app.use(express.static('./public'));
+app.use(express.urlencoded({ extended: false }));
 
 app.use(
-    session({
-        secret: process.env.AUTH_SECRET,
-        saveUninitialized:true,
-        resave:false,
-    })
+  session({
+    secret: process.env.AUTH_SECRET,
+    saveUninitialized: true,
+    resave: false,
+  })
 );
 
 app.use(flash());
 
-app.use('/',userRouter);
-app.use('/dashboard',verifyUser,dashboardRouter);
+app.use('/', userRouter);
+app.use('/dashboard', verifyUser, dashboardRouter);
 
-// Only declare the wild card page route last
-app.get('*',(req,res)=>{
-    res.status(404).render('index',{message: 'Page Not Found.'});
+app.get('*', (req, res) => {
+  res.status(404).render('index', { 
+    title:'Not Found',
+    message: 'Not Found' 
+  });
 });
 
 const PORT = 3000;
 
-app.listen(PORT,()=>{
-    console.log(`Server running on port ${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

@@ -5,7 +5,7 @@ const CustomerSchema = new Schema({
     email:{type:String, required:true,unique:true},
     phone: {type: String, required: true},
     address:{type: String, required: true},
-    owner: {type: SchemaTypes.ObjectId,ref:'User'},
+    owner: {type: Schema.Types.ObjectId,ref:'User'},
 });
 
 const Customer = model('Customer',CustomerSchema);
